@@ -51,3 +51,10 @@ http://nmdc.sourceforge.net/NMDC.html
 
 http://github.com/blakef/pydirectconnect
 http://github.com/rlane/dci
+
+# History
+
+This project is **old**.  The original repo was in darcs start Fri Apr 8 14:00:51 2005.  2005!  When I finally published this in 2014 on github I wiped the old history to make sure any hardcoded values where not also pushed out for all to see.  
+
+The websocket based WebUI was written in 2010.  
+
