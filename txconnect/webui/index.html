@@ -1,0 +1,283 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+  <meta charset="utf-8" /> 
+  <title>TXConnect</title> 
+  <script src="/vendor/jquery-1.4.2.js"></script>
+  <script src="/vendor/jquery.layout-1.2.0.js"></script>
+  <script src="/vendor/jquery.ui-1.8.custom.min.js"></script>
+  <script src="/vendor/jquery.hotkeys.js"></script>
+  <script src="/vendor/prototype_1.7rc1_no_dom.js"></script>
+  <script src="/vendor/dateparse.js"></script>
+  <script src="/vendor/date.js"></script>
+<!--
+  <script src="/vendor/flexigrid/flexigrid.js"></script>
+  <link rel="stylesheet" href="/vendor/flexigrid/css/flexigrid/flexigrid.css">
+-->
+<!--
+  <link rel="stylesheet" type="text/css" media="screen" href="/vendor/jquery.jqGrid-3.6.4/css/ui.jqgrid.css" />
+  <script src="/vendor/jquery.jqGrid-3.6.4/js/i18n/grid.locale-en.js"></script>
+  <script src="/vendor/jquery.jqGrid-3.6.4/js/jquery.jqGrid.min.js"></script>
+-->
+
+  <script src="/vendor/dataTables-1.6/media/js/jquery.dataTables.js"></script>
+  <link rel="stylesheet" href="/vendor/dataTables-1.6/media/css/demo_table.css" />
+
+  <script src="/vendor/jsTree.v.0.9.9a2/jquery.tree.js"></script>
+  <link rel="stylesheet" href="/vendor/jsTree.v.0.9.9a2/themes/apple/style.css" />
+  
+  <script src="/vendor/stacktrace.js"></script>
+
+  <script src="/js/message_bus.js"></script>
+  <script src="/js/hub_manager.js"></script>
+  <script src="/js/search_manager.js"></script>
+  <script src="/js/peer_panel.js"></script>
+  <script src="/js/humanreadable.js"></script>
+  <script src="/js/download_queue_manager.js"></script>
+  <script src="/js/indexer_panel.js"></script>
+  <script src="/js/private_message_manager.js"></script>
+
+  <link rel="stylesheet" href="/vendor/jquery.ui.themes/smoothness/jquery-ui-1.8.custom.css" />
+  <link rel="stylesheet" href="/css/txconnect.css" />
+
+
+  <script>
+window.onerror = function() {
+printStackTrace();
+}
+var $tabs;
+var $tab_counter = 1;
+
+$(document).ready(function () {
+  $('#connecting-to-backend').dialog({ draggable: false, resizable: false });
+  $(document).bind('connected', function() {
+    $('#connecting-to-backend').dialog('close');
+  });
+  $(document).bind('disconnected', function() {
+    $('#connecting-to-backend').dialog('open');
+  });
+  
+  $('body').layout({ 
+    applyDefaultStyles: true,
+    south: {
+      size: 175
+    }
+  });
+  
+  // tabs init with a custom tab template and an "add" callback filling in the content
+  $tabs = $('#tabs').tabs({
+    tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>',
+    select: function(evt, ui) {
+      var controller = $(this).data('currentController');
+      if (controller && controller.onHide) {
+        controller.onHide();
+      }
+    },
+    show: function(evt, ui) {
+      var controller = $(ui.panel).data('controller');
+      $(this).data('currentController', controller);
+      if (controller && controller.onShow) {
+        controller.onShow();
+      }
+    }
+    
+  });
+
+  // close icon: removing the tab on click
+  // note: closable tabs gonna be an option in the future - see http://dev.jqueryui.com/ticket/3924
+  $('#tabs span.ui-icon-close').live('click', function() {
+    var index = $('li',$tabs).index($(this).parent());
+    var tab = $('#tabs-' + (index + 1));
+    var manager = tab.data('manager');
+    var controller = tab.data('controller');
+    if (manager && controller && manager.onClose) {
+      manager.onClose(controller);
+    }
+    $tabs.tabs('remove', index);
+  });
+
+  var tx = window.tx = {}
+  tx.messageBus = new MessageBus();
+  tx.hubManager = new HubManager();
+  tx.peerPanel = new PeerPanel();
+  tx.indexerPanel = new IndexerPanel();
+  tx.searchManager = new SearchManager();
+  tx.downloadQueueManager = new DownloadQueueManager();
+  tx.privateMessageManager = new PrivateMessageManager();
+  
+  tx.messageBus.connect();
+});
+  </script>
+</head> 
+<body> 
+
+<div class="ui-layout-center">
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-start">Start Page</a></li>
+      </ul>
+      <div id="tabs-start">
+        <h2>Search</h2>
+        <form id="start_search">
+          <input type="text" name="term" />
+          <input type="submit" value="search" />
+        </form> 
+        <p><a id="advanced-search" href="javascript:void();">Advanced...</a></p>
+        <p><a id="download-queue" href="javascript:void();">Download Queue...</a></p>
+        <div id="indexer">
+          <h2>Share</h2>
+          <form id="start_indexer">
+            <p><span class="count">0</span> files / <span class="size">0</span> <input type="submit" value="reindex" /></p>
+          </form> 
+          <div id="indexer-stats" style="display: none;">
+          <dl>
+            <dt>Looking at files in:</dt>
+            <dd class="currentDirectory"></dd>
+            <dt>Currently Hashing:</dt>
+            <dd class="fileBeingHashed"><b>not needed yet</b></dd>
+            <dt>Files seen / Files already hashed:</dt>
+            <dd><span class="fileCount">0</span> / <span class="skipped">0</span></dd>
+            <dt>Files to be hashed:</dt>
+            <dd><span class="filesToBeHash">0</span> / <span class="sizeToBeHash">0</span> / <span class="rate">0</span> / <span class="timeLeft">~</span></dd>
+          </dl>
+          </div>  
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="ui-layout-south">
+  <div id="peer-status-panel">
+    <table id="peer-status">
+    <thead> 
+      <tr> 
+        <th width="100">User</th> 
+        <th width="100">Hub</th> 
+        <th width="100">Status</th>
+        <th width="100">Time Left</th> 
+        <th width="100">Speed</th> 
+        <th width="100">Filename</th> 
+        <th width="100">Size</th> 
+        <th width="100">Path</th> 
+      </tr> 
+    </thead> 
+    <tbody>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+  <div id="templates" style="display: none;">
+    <div id="hub-panel-template" class="hub-panel">
+      <div class="messages">
+      </div>
+      <div class="chat-input">
+        <form class="chat_form">
+          <input class="chat_form_input" type="text" />
+        </form>
+      </div>
+      <div class="users-panel">
+        <table class="users">
+          <thead>
+            <tr>
+              <th>Nick</th>
+  <!--
+              <th>Shared</th>
+              <th>Description</th>
+  -->
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="private-message-template" class="private-message-panel">
+      <div class="messages">
+      </div>
+      <div class="chat-input">
+        <form class="chat_form">
+          <input class="chat_form_input" type="text" />
+        </form>
+      </div>
+    </div>
+
+    <div id="search-panel-template" class="search-panel">
+      <div class="controls">
+        <div class="controls-inner">
+        <form class="file_search">
+        
+          <p>Search for</p>
+          <p><input type="text" name="term" /></p>
+          <p class="wait_time"></p>
+          <p>File Type</p>
+          <p>
+            <select name="filetype">
+              <option value="1">Any</option>
+              <option value="2">Audio</option>
+              <option value="3">Compressed</option>
+              <option value="4">Document</option>
+              <option value="5">Executable</option>
+              <option value="6">Picture</option>
+              <option value="7">Video</option>
+              <option value="8">Directory</option>
+              <option value="9">TTH</option>
+            </select>
+          </p>
+          
+          <p><input type="submit" value="Search" /></p>
+        </form>         
+        </div>
+      </div>
+      <div class="results">
+        <table class="display">
+          <thead>
+            <tr>
+              <th width="100">File</th>
+              <th width="100">Hits</th>
+              <th width="100">User</th>
+              <th width="100">Type</th>
+              <th width="100">Size</th>
+              <th width="100">Path</th>
+              <th width="100">Slots</th>
+              <th width="100">Connection</th>
+              <th width="100">Hub</th>
+              <th width="100">Exact Size</th>
+              <th width="100">TTH Root</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="download-queue-panel-template" class="download-queue-panel">
+      <div class="directories">
+        <div class="directories-inner">
+        </div>
+      </div>
+      <div class="files-panel">
+        <table class="display">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Sources</th>
+              <th>TTH</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="connecting-to-backend">
+    <h1>Connecting to backend</h1>
+  </div>  
+   
+</body> 
+</html>

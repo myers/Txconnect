@@ -1,0 +1,5 @@
+recursive-include txconnect/webui *
+recursive-include txconnect/test *.bz2
+README.markdown
+TODO.markdown
+

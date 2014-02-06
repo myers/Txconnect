@@ -1,0 +1,4 @@
+_trial_temp
+*.pyc
+twisted/plugins/dropin.cache
+Txconnect.egg-info

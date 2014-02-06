@@ -1,0 +1,170 @@
+#tabs { height: 99%; padding: 0; margin: 0; z-index: 10; }
+#tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+/*  .ui-tabs .ui-tabs-panel { height: auto; position: absolute; bottom: 0; top:
+1em; z-index: 0;} 
+*/
+
+#peer-status-panel span.ui-icon {
+  float: left;
+}
+
+#peer-status-panel table td {
+  overflow: hidden;
+}
+
+table#peer-status {
+  width: 100%;
+}
+
+.dataTables_empty {
+  display: none;
+}
+
+.download-queue-panel .directories {
+  position:absolute; top:3em; left:0; width: 250px; bottom:0;
+  border:1px solid black;
+  overflow: scroll;
+}
+
+.download-queue-panel .directories .directories-inner {
+  padding: 20px;
+}
+
+.download-queue-panel .files-panel {
+  position:absolute; top:3em; left:260px; right:0; bottom:0;
+  overflow-y: scroll;
+}
+
+.download-queue-panel table {
+  border:1px solid black;
+}
+
+.search-panel .controls {
+  position:absolute; top:3em; left:0; width: 250px; bottom:0;
+}
+
+.search-panel .controls .controls-inner {
+  padding: 20px;
+}
+
+.search-panel table, #peer-status-panel table, .download-queue-panel table {
+  white-space: nowrap;
+}
+
+.search-panel .results {
+  position:absolute; top:3em; left:260px; right:0; bottom:0;
+  overflow-y: scroll;
+}
+
+.hub-panel .users-panel {
+  position: absolute; top:3em; right:0px; width: 250px; bottom:0px;
+  overflow-y: scroll;
+}
+
+.hub-panel .users-panel table {
+  width: 100%;
+}
+
+.hub-panel .messages {
+  position:absolute; top:3em; left:5px; right:260px; bottom:3em; height:auto;
+  /*    margin-top: 0em; */
+  background-color: #000;
+  color: #FFF;
+  /* bottom: 25px; */
+  overflow: auto;
+}
+.hub-panel .chat-input {
+  position:absolute; bottom: 5px; left: 5px; right: 260px;
+  height: 2em;
+  margin: 0em;
+  padding: 0;
+}
+
+.hub-panel .chat-input .chat_form .chat_form_input {
+  border: 1px solid #CCC;
+  font-size: 16px;
+  height: 20px;
+  padding: 5px;
+  width: 99%;
+}
+
+.hub-panel .chat-input .chat_form input[disabled] {
+  background-color: #EEE;
+}
+
+.hub-panel .message {
+  width: 95%;
+}
+
+.hub-panel .me, .hub-panel .nick {
+  color: #FF9
+}
+
+.hub-panel .me {
+  color: #F99;
+}
+
+.hub-panel .nick {
+  color: #99F;
+}
+
+.hub-panel .status {
+  color: #DDD;
+}
+
+
+.private-message-panel .users-panel {
+  position: absolute; top:3em; right:0px; width: 250px; bottom:0px;
+  overflow-y: scroll;
+}
+
+.private-message-panel .users-panel table {
+  width: 100%;
+}
+
+.private-message-panel .messages {
+  position:absolute; top:3em; left:5px; right:5px; bottom:3em; height:auto;
+  /*    margin-top: 0em; */
+  background-color: #000;
+  color: #FFF;
+  /* bottom: 25px; */
+  overflow: auto;
+}
+.private-message-panel .chat-input {
+  position:absolute; bottom: 5px; left: 5px; right: 260px;
+  height: 2em;
+  margin: 0em;
+  padding: 0;
+}
+
+.private-message-panel .chat-input .chat_form .chat_form_input {
+  border: 1px solid #CCC;
+  font-size: 16px;
+  height: 20px;
+  padding: 5px;
+  width: 99%;
+}
+
+.private-message-panel .chat-input .chat_form input[disabled] {
+  background-color: #EEE;
+}
+
+.private-message-panel .message {
+  width: 95%;
+}
+
+.private-message-panel .me, .private-message-panel .nick {
+  color: #FF9
+}
+
+.private-message-panel .me {
+  color: #F99;
+}
+
+.private-message-panel .nick {
+  color: #99F;
+}
+
+.private-message-panel .status {
+  color: #DDD;
+}

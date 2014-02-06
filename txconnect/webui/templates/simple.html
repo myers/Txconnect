@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}{% endblock %}</title>
+  <style type="text/css">
+    .active {background-color:sienna;}
+    table, th, td { border: 1px solid black; }
+    table { border-collapse:collapse; }
+    
+    .not-registered { text-decoration: line-through; }
+    .offline { color: grey };
+    .connected { font-weight: bold; }
+    
+    
+    tr {vertical-align:text-top;}
+    tr.even {background-color: #eee;}
+    tr.odd {background-color: #fff;}
+    tr.active {background-color: #99FFCC; }
+    tr.online {background-color: green;}
+    table {width: 100%}
+    {% block style %}{% endblock %}
+  </style>
+  <script src="/vendor/jquery-1.4.2.js"></script>
+  <script src="/vendor/jquery.tablesorter.min.js"></script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+<div id="nav">
+  <a href="/downloads/">downloads</a> | 
+  <a href="/peers/">peers</a> | 
+  <a href="/hubs/">hubs</a> | 
+  <a href="/queuestore/">queuestore</a> |
+  <a href="/q/">download queue by priority</a> |
+  <a href="/search/">search</a> |
+  <a href="/sharestore/">sharestore</a> |
+  <a href="/filelist/">filelist</a> |
+  <a href="/trafficlog/">traffic log</a> |
+  <a href="/services/">services</a>
+</div>
+{% block content %}{% endblock %}
+</body>
+</html>

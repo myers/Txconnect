@@ -1,0 +1,6 @@
+Twisted==13.2.0
+Django==1.4.10
+Louie==1.1
+tiger==0.3
+pyaml==13.12.0
+lxml==3.3.0

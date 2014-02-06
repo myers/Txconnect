@@ -1,0 +1,25 @@
+networking:
+  external_ip: 127.0.0.1
+  port: 4245
+
+files:
+  incoming: incoming
+  finished: finished
+  shared:
+    Downloads: finished
+
+webui:
+  http_port: 9000
+  username: foo
+  password: bar
+
+hubs:
+- active: true
+  hostname: localhost:5642
+  nick: test
+  password: ~
+  description: ~
+  email: ~
+  connection: ~
+  flag: ~
+
